@@ -8,7 +8,6 @@
 import UIKit
 
 class ViewController: UIViewController {
-    
     @IBOutlet weak var tapGesture : UITapGestureRecognizer!
 
     override func viewDidLoad() {
@@ -17,18 +16,40 @@ class ViewController: UIViewController {
     }
     
     @IBAction func tapViewGesture(){
+        let num = 0
+        let bool = true
+        let tapX = tapGesture.location(in: self.view).x-25
+        let tapy = tapGesture.location(in: self.view).y-25
+        printFootprints(num: num,tapX: tapX,tapY: tapy, bool: bool)
+    }
+    
+    func printFootprints(num : Int, tapX : CGFloat, tapY : CGFloat, bool : Bool){
+        var number = num
+        var x = tapX
+        var y = tapY
+        var b = bool
         let newImageView = UIImageView()
-        newImageView.frame = CGRect(x: (tapGesture.location(in: self.view).x-40), y: (tapGesture.location(in: self.view).y-40), width: 80, height: 80)
+        newImageView.frame = CGRect(x: x, y: y, width: 50, height: 50)
         newImageView.image = UIImage(named: "footprint")
         self.view.addSubview(newImageView)
-        let time = DispatchTime.now() + .seconds(1)
-        DispatchQueue.main.asyncAfter(deadline: time) {
-            UIView.animate(withDuration: 0.5, animations: {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .milliseconds(1200)) {
+            UIView.animate(withDuration: 0.4, animations: {
                 newImageView.alpha = 0
             })
         }
+        if b == true{
+            x -= 70
+            b = false
+        }else{
+            x += 70
+            b = true
+        }
+        if number < 10{
+            number+=1
+            y -= 80
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .milliseconds(200)) {
+                self.printFootprints(num: number,tapX: x,tapY: y,bool: b)
+            }
+        }
     }
-
-
 }
-
